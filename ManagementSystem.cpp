@@ -96,6 +96,12 @@ void ManagementSystem::addClient(const Client &client){
 }
 
 Client ManagementSystem::removeClient(int clientNumber) {
+    //1. OBTENER TODOS LOS CLIENTES DEL ARCHIVO
+    //2. OBTENER EL CLIENTE QUE QUIERO MODIFICAR DENTRO DE ESA LISTA DE CLIENTES
+    //3.MODIFICAR EL STATUS DE CLIENTE A BAJA
+    // 3.1 ASEGURAR QUE LA MODIFICACION QUEDO ADENTRO DEL ARRAY CREADO EN EL PUNTO 1
+    // 4. EJECUTAR OVERWRITECLIENTSTOFILE
+    // 4.1 ENVIAR POR PARAMETRO LA LISTA DE CLIENTE YA MODIFICADA
     Client client = getClientByNumber(clientNumber);
     client.setStatus("baja");
     return client;
@@ -141,7 +147,7 @@ Client* ManagementSystem::loadClientsFromFile(const string& filename, int& clien
             break;
         }
 
-        clients[clientCount] = Client(id, name, surname, type, year, status);
+        clients[clientCount] = Client(id, name, surname, type, year, status); // regcl
         clientCount++;
     }
     return clients;

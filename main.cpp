@@ -68,9 +68,9 @@ void showAllClients(ManagementSystem& ms){
         for (int i=0 ; i < clientCount ; i++){
             clients[i] = loadedClients[i];
         }
-        //ms.showAllClients(clients, clientCount, ALL);
+        ms.showAllClients(clients, clientCount, ALL);
         ms.showAllClients(clients, clientCount, ACTIVE);
-        //ms.showAllClients(clients, clientCount, INACTIVE);
+        ms.showAllClients(clients, clientCount, INACTIVE);
     }
 }
 
@@ -79,6 +79,8 @@ void clearScreen() {
 }
 
 void addClientMenu(ManagementSystem& ms) {
+    // toma una referencia a un objeto ManagementSystem llamado ms.
+    // La referencia permite que la función modifique el objeto ManagementSystem original que se pasa como argumento.
     cout << "Ejecutando: Agregar cliente..." << endl;
     // Crear un dialogo en consola para ingresar los datos necesarios para el cliente
     cout << "Ingrese el número de cliente: ";
@@ -130,7 +132,6 @@ bool isValidClient(Client client, ManagementSystem &ms) {
 }
 
 void modifyData(ManagementSystem& system) {
-    cout << "Ejecutando: Modificar datos..." << endl;
     int clientNumber;
     cout << "Ingrese el numero a eliminar"<< endl ;
     cin >> clientNumber;
@@ -152,15 +153,15 @@ void consultClientByNumber(ManagementSystem& system) {
     system.showClient(system.getClientByNumber(clientNumber));
 }
 
-void showTransactionsByClient(ManagementSystem& system) {
+/*void showTransactionsByClient(ManagementSystem& system) {
     cout << "Ejecutando: Mostrar transacciones por cliente..." << endl;
     // Aquí iría el código para mostrar las transacciones de un cliente.
-}
+}*/
 
-void showExtractionAndDepositReports(ManagementSystem& system) {
+/*void showExtractionAndDepositReports(ManagementSystem& system) {
     cout << "Ejecutando: Mostrar informes de extracciones y depósitos..." << endl;
     // Aquí iría el código para mostrar los informes de extracciones y depósitos.
-}
+}*/
 
 // Esta función maneja el submenú para las consultas.
 void consultations(ManagementSystem& system) {
@@ -169,9 +170,7 @@ void consultations(ManagementSystem& system) {
     do {
         cout << "1. Consultas \t> \"Cliente\" por número de cliente" << endl;
         cout << "2. Consultas \t> Todos los clientes" << endl;
-        cout << "3. Consultas \t> Transacciones por cliente" << endl;
-        cout << "4. Consultas \t> Informes de extracciones y depósitos" << endl;
-        cout << "5.\t\t< Volver al menú anterior" << endl;
+        cout << "3.\t\t< Volver al menú anterior" << endl;
         cin >> option;
 
         switch (option) {
@@ -181,13 +180,8 @@ void consultations(ManagementSystem& system) {
             case 2:
                 showAllClients(system);
                 break;
+
             case 3:
-                showTransactionsByClient(system);
-                break;
-            case 4:
-                showExtractionAndDepositReports(system);
-                break;
-            case 5:
                 cout << "Volviendo al menú principal..." << endl;
                 break;
             default:
@@ -195,7 +189,7 @@ void consultations(ManagementSystem& system) {
                 break;
         }
         clearScreen();
-    } while (option != 5);
+    } while (option != 4);
 }
 
 void debugMenu(ManagementSystem& system){
@@ -237,9 +231,9 @@ int main() {
     do{
         cout << "1. Agregar Cliente" << endl;
         cout << "2. Dar de Baja " << endl;
-        cout << "5. Consultas" << endl;
-        cout << "0. Menu Debug" << endl; // Debug menu
-        cout << "6. Salir" << endl;
+        cout << "3. Consultas" << endl;
+        cout << "4. Menu Debug" << endl; // Debug menu
+        cout << "5. Salir" << endl;
         cin >> option;
 
         switch (option) {
@@ -249,19 +243,13 @@ int main() {
             case 2:
                 modifyData(system);
                 break;
-        //    case 3:
-               // performExtraction(system);
-           //     break;
-        //    case 4:
-              //  performDeposit(system);
-                break;
-            case 5:
+            case 3:
                 consultations(system);
                 break;
             case 6:
                 cout << "Exiting..." << endl;
                 break;
-            case 0: // Debug menu
+            case 4: // Debug menu
                 debugMenu(system);
                 break;
             default:

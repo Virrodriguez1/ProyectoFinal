@@ -57,6 +57,8 @@ public:
 
     void saveClientToFile(const Client &client);
 
+    void overwriteClientsToFile(Client* clients, int clientCount);
+
     /**
      * @brief Obtiene todos los clientes en el sistema.
      * @param clientCount Una referencia al conteo de clientes.
