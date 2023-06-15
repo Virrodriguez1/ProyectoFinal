@@ -1,6 +1,3 @@
-//
-// Created by fcabanilla on 9/6/2023.
-//
 
 #include "Client.h"
 

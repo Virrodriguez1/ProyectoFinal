@@ -27,27 +27,11 @@ void testLoadTransactionFromFile(ManagementSystem ms) {
     }
 }
 
-void testSaveTransactionsToFile(ManagementSystem ms){
-    int transactionCount = 3;
-    static Transaction transactions[MAX_TRANSACTIONS];
-    transactions[0] = Transaction(4, 894, 'D', 1, 11, 2021);
-    transactions[1] = Transaction(5, 894, 'A', 12, 12, 2020);
-    transactions[2] = Transaction(6, 894, 'B', 21, 8, 2010);
-    ms.saveTransactionsToFile(transactions, transactionCount, "../transacciones.txt");
-    testLoadTransactionFromFile(ms);
-}
-
-void testSaveTransactionToFile(ManagementSystem ms){
-    static Transaction transaction;
-    transaction = Transaction(10, 1023, 'A', 28, 7, 2011);
-    ms.saveTransactionToFile(transaction, "../transacciones.txt");
-    testLoadTransactionFromFile(ms);
-}
 
 void testLoadClientsFromFile(ManagementSystem ms) {
     int clientCount = 0;
     static Client clients[MAX_CLIENTS];
-    Client* loadedClients = ms.loadClientsFromFile("../clientes.txt",clientCount);
+    Client* loadedClients = ms.loadClientsFromFile("../clientes2.txt",clientCount);
 
     if (loadedClients != nullptr){
         for (int i=0 ; i < clientCount ; i++){
@@ -59,7 +43,8 @@ void testLoadClientsFromFile(ManagementSystem ms) {
 
 //*********************************************
 
-void showAllClients(ManagementSystem& ms){
+
+void showAllClients(ManagementSystem& ms,ClientStatus option){
     int clientCount = 0;
     static Client clients[MAX_CLIENTS];
     Client* loadedClients = ms.getAllClients( clientCount);
@@ -68,9 +53,7 @@ void showAllClients(ManagementSystem& ms){
         for (int i=0 ; i < clientCount ; i++){
             clients[i] = loadedClients[i];
         }
-        ms.showAllClients(clients, clientCount, ALL);
-        ms.showAllClients(clients, clientCount, ACTIVE);
-        ms.showAllClients(clients, clientCount, INACTIVE);
+        ms.showAllClients(clients, clientCount, option);
     }
 }
 
@@ -153,24 +136,41 @@ void consultClientByNumber(ManagementSystem& system) {
     system.showClient(system.getClientByNumber(clientNumber));
 }
 
-/*void showTransactionsByClient(ManagementSystem& system) {
-    cout << "Ejecutando: Mostrar transacciones por cliente..." << endl;
-    // Aquí iría el código para mostrar las transacciones de un cliente.
-}*/
 
-/*void showExtractionAndDepositReports(ManagementSystem& system) {
-    cout << "Ejecutando: Mostrar informes de extracciones y depósitos..." << endl;
-    // Aquí iría el código para mostrar los informes de extracciones y depósitos.
-}*/
 
 // Esta función maneja el submenú para las consultas.
+void addTransaction (ManagementSystem& ms){
+    cout << "Ingrese el número de Transaccion: ";
+    int transactionNumber;
+    cin >> transactionNumber;
+    cout << "Ingrese el monto: ";
+    int amount;
+    cin >> amount;
+    cout << "Ingrese el tipo ";
+    char type;
+    cin >> type;
+    cout << "Ingrese el dia ";
+    int day;
+    cin >> day;
+    cout << "Ingrese el mes";
+    int month;
+    cin >> month;
+    cout << "Ingrese el ano ";
+    int year;
+    cin >> year;
+
+    Transaction transaction = Transaction( transactionNumber,amount,type,day,month,year);
+    ms.addTransaction (transaction);
+}
 void consultations(ManagementSystem& system) {
     int option;
-    clearScreen();
+    // clearScreen();
     do {
         cout << "1. Consultas \t> \"Cliente\" por número de cliente" << endl;
         cout << "2. Consultas \t> Todos los clientes" << endl;
-        cout << "3.\t\t< Volver al menú anterior" << endl;
+        cout << "3. Consultas  \t > Clientes Activos" << endl;
+        cout << "5. Consultas \t > Clientes Inactivos "<< endl;
+        cout << "6.\t\t< Volver al menú anterior" << endl;
         cin >> option;
 
         switch (option) {
@@ -178,10 +178,15 @@ void consultations(ManagementSystem& system) {
                 consultClientByNumber(system);
                 break;
             case 2:
-                showAllClients(system);
+                showAllClients(system,ALL);
                 break;
-
             case 3:
+                showAllClients(system,ACTIVE);
+                break;
+            case 4 :
+                showAllClients(system,INACTIVE);
+                break;
+            case 5:
                 cout << "Volviendo al menú principal..." << endl;
                 break;
             default:
@@ -189,7 +194,7 @@ void consultations(ManagementSystem& system) {
                 break;
         }
         clearScreen();
-    } while (option != 4);
+    } while (option != 6);
 }
 
 void debugMenu(ManagementSystem& system){
@@ -198,8 +203,6 @@ void debugMenu(ManagementSystem& system){
     do {
         cout << "1. Imprimir todas las Transacciones" << endl;
         cout << "2. Imprimir todos los Clientes" << endl;
-        cout << "3. Guardar Transacciones en archivo" << endl;
-        cout << "4. Guardar Transacción en archivo" << endl;
         cin >> option;
 
         switch (option) {
@@ -208,12 +211,6 @@ void debugMenu(ManagementSystem& system){
                 break;
             case 2:
                 testLoadClientsFromFile(system);
-                break;
-            case 3:
-                testSaveTransactionsToFile(system);
-                break;
-            case 4:
-                testSaveTransactionToFile(system);
                 break;
             default:
                 cout << "Opción incorrecta" << endl;
@@ -232,8 +229,9 @@ int main() {
         cout << "1. Agregar Cliente" << endl;
         cout << "2. Dar de Baja " << endl;
         cout << "3. Consultas" << endl;
-        cout << "4. Menu Debug" << endl; // Debug menu
-        cout << "5. Salir" << endl;
+        cout << "4. Menu Debug" << endl; // Debug menu -- imprime
+        cout << "5. Agregar Transaccion" << endl;
+        cout << "6. Salir" << endl;
         cin >> option;
 
         switch (option) {
@@ -249,9 +247,11 @@ int main() {
             case 6:
                 cout << "Exiting..." << endl;
                 break;
-            case 4: // Debug menu
+            case 4: // Debug menu -- Imprimir
                 debugMenu(system);
                 break;
+            case 5:
+                addTransaction(system);
             default:
                 cout << "Incorrect option" << endl;
                 break;

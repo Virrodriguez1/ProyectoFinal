@@ -57,7 +57,8 @@ public:
 
     void saveClientToFile(const Client &client);
 
-    void overwriteClientsToFile(Client* clients, int clientCount);
+    //void overwriteClientsToFile(Client* clients, int clientCount);
+
 
     /**
      * @brief Obtiene todos los clientes en el sistema.
@@ -77,7 +78,7 @@ public:
     /**
      *   Transacciones
      */
-
+    void addTransaction (const Transaction &transaction);
     /**
      * @brief Muestra todas las transacciones.
      * @param transactions Un puntero al array de transacciones.
@@ -107,7 +108,7 @@ public:
      */
     static void saveTransactionsToFile(const Transaction *transactions, int transactionCount, const string &filename);
 
-    static void saveTransactionToFile(Transaction transaction, string filename);
+    static void saveTransactionToFile(const Transaction &transaction);
 
     /**
      * All Getters and Setters

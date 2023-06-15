@@ -5,7 +5,8 @@
 #include "ManagementSystem.h"
 #include "ClientStatus.h"
 
-#define FILENAME_CLIENTS "../clientes.txt"
+//#define FILENAME_CLIENTS "../clientes.txt"
+#define FILENAME_CLIENTS "../clientes2.txt"
 #define FILENAME_TRANSACTIONS "../transacciones.txt"
 
 void saveClientToFile(const Client &client, string filename);
@@ -18,7 +19,7 @@ using namespace std;
  * Transactions
  */
 
-Transaction* ManagementSystem::loadTransactionsFromFile(const std::string& filename, int& transactionCount) {
+/*Transaction* ManagementSystem::loadTransactionsFromFile(const std::string& filename, int& transactionCount) {
     transactionCount = 0;
     ifstream file(filename);
     if (!file) {
@@ -52,6 +53,32 @@ Transaction* ManagementSystem::loadTransactionsFromFile(const std::string& filen
     }
     //file.close();
     return transactions;
+}*/
+
+Transaction* ManagementSystem::loadTransactionsFromFile(const string &filename, int &transactionCount) {
+    ifstream file(filename);
+    if (!file) {
+        cerr << "No se pudo abrir el archivo de clientes: " << filename << endl;
+        return nullptr;
+    }
+    string line;
+    while (getline(file, line)) { //iss(line) crea un objeto istringstream llamado iss que contiene el contenido de la cadena line
+        istringstream iss(line); // Cada línea se descompone en varios elementos usando un flujo de entrada de cadena
+        int id, amount,day,month,year;
+        char type;
+        if (!(iss >> id >> amount >> type >> day >> month >> year)) {
+           // cerr << "Error al leer la línea de clientes: " << line << endl;
+            continue;
+        }
+        if (transactionCount >= MAX_TRANSACTIONS) {
+            cerr << "Se ha alcanzado el número máximo de clientes. Ignorando los clientes adicionales." << endl;
+            break;
+        }
+
+        transactions[transactionCount] = Transaction(id,amount,type,day,month,year);
+        transactionCount++;
+    }
+    return transactions;
 }
 
 void ManagementSystem::saveTransactionsToFile(const Transaction *transactions, int transactionCount, const string &filename) {
@@ -71,10 +98,10 @@ void ManagementSystem::saveTransactionsToFile(const Transaction *transactions, i
     file.close();
 }
 
-void ManagementSystem::saveTransactionToFile(Transaction transaction, string filename) {
-    ofstream file(filename, ios::app);
+void ManagementSystem::saveTransactionToFile(const Transaction &transaction) {
+    ofstream file(FILENAME_TRANSACTIONS, ios::app);
     if (!file) {
-        cerr << "No se pudo abrir el archivo: " << filename << endl;
+        cerr << "No se pudo abrir el archivo: " << FILENAME_TRANSACTIONS << endl;
         return;
     }
     file << transaction.getTransactionNumber() << "\t"
@@ -86,7 +113,9 @@ void ManagementSystem::saveTransactionToFile(Transaction transaction, string fil
     file.close();
 
 }
-
+void ManagementSystem::addTransaction(const Transaction &transaction){
+    saveTransactionToFile(transaction);
+}
 /*
  * CLIENTS
  */
@@ -134,12 +163,12 @@ Client* ManagementSystem::loadClientsFromFile(const string& filename, int& clien
         return nullptr;
     }
     string line;
-    while (getline(file, line)) {
-        istringstream iss(line);
+    while (getline(file, line)) { //iss(line) crea un objeto istringstream llamado iss que contiene el contenido de la cadena line
+        istringstream iss(line); // Cada línea se descompone en varios elementos usando un flujo de entrada de cadena
         int id, year;
         string name, surname, type, status;
         if (!(iss >> id >> name >> surname >> type >> year >> status)) {
-            cerr << "Error al leer la línea de clientes: " << line << endl;
+       //     cerr << "Error al leer la línea de clientes: " << line << endl;
             continue;
         }
         if (clientCount >= MAX_CLIENTS) {
@@ -164,6 +193,8 @@ Client ManagementSystem::getClientByNumber(int clientNumber) {
 
     return Client();
 }
+
+//Client ManagementSystem::overwriteClientsToFile(Client *clients, int clientCount){}
 
 /*
  * SHOWING METHODS

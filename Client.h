@@ -1,6 +1,4 @@
-//
-// Created by fcabanilla on 9/6/2023.
-//
+
 #ifndef CLIENT_H
 #define CLIENT_H
 
@@ -43,6 +41,7 @@ public:
      * @param accountType Tipo de cuenta del cliente
      * @param year Año
      */
+     //Al agregar cliente por defecto esta activo
     Client(int clientNumber, string  name, string  lastName, string  accountType, int year);
 
     /**
